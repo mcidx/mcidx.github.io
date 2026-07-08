@@ -22,8 +22,11 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Setup project
-        run: bun install
+      - name: Install dependencies project
+        run: |
+          sudo apt update
+          sudo apt install libarchive-tools
+          bun install
 
       - name: Setup client
         run: bun setup-client ${{ env.CLIENT_TYPE }}
