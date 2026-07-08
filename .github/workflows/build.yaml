@@ -2,6 +2,13 @@ name: Build
 on: push
 
 env:
+  # mojang
+  VERSION_MANIFEST: https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
+
+  # project
+  CLIENT: temp/client
+
+  # workflow
   CLIENT_TYPE: snapshot
 
 jobs:
