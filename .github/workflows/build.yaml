@@ -1,0 +1,25 @@
+name: Build
+on: push
+
+env:
+  CLIENT_TYPE: snapshot
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Setup project
+        run: bun install
+
+      - name: Setup client
+        run: bun setup-client ${{ env.CLIENT_TYPE }}
+
+      - name: Build
+        run: bun run build
