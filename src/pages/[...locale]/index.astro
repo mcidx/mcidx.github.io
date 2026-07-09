@@ -13,4 +13,21 @@ export const getStaticPaths = (() => {
 const { locale } = Astro.props;
 ---
 
-<BaseLayout {locale} />
+<style>
+  .title {
+    display: flex;
+    justify-content: center;
+
+    padding: var(--u4) 0;
+
+    .image {
+      width: calc(40 * var(--u2));
+    }
+  }
+</style>
+
+<BaseLayout {locale}>
+  <div class="title">
+    <img class="image" src="/assets/title.png" />
+  </div>
+</BaseLayout>

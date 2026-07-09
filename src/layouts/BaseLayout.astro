@@ -1,7 +1,7 @@
 ---
 import Footer from "../components/Footer.astro";
 import Main from "../components/Main.astro";
-import Navbar from "../components/Navbar.astro";
+import Theme from "../components/Theme.astro";
 import type { WithLocale } from "../types/withLocale";
 
 type Props = WithLocale;
@@ -9,30 +9,21 @@ type Props = WithLocale;
 const { locale } = Astro.props;
 ---
 
-<html lang={locale}>
+<html lang={locale} class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <style>
-      :root {
-        --base-u: 0.5rem;
-        --n: round(down, 100vw / var(--base-u));
-
-        --u0: calc(100vw / var(--n));
-        --u1: calc(var(--u0) * 2);
-        --u2: calc(var(--u1) * 2);
-      }
-
       body {
         margin: 0;
       }
     </style>
+
+    <Theme />
   </head>
 
   <body>
-    <Navbar {locale} />
-
     <Main>
       <slot />
     </Main>
