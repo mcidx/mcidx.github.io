@@ -13,13 +13,30 @@ const { locale } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      :root {
+        --base-u: 0.5rem;
+        --n: round(down, 100vw / var(--base-u));
+
+        --u0: calc(100vw / var(--n));
+        --u1: calc(var(--u0) * 2);
+        --u2: calc(var(--u1) * 2);
+      }
+
+      body {
+        margin: 0;
+      }
+    </style>
   </head>
 
   <body>
     <Navbar {locale} />
+
     <Main>
       <slot />
     </Main>
+
     <Footer {locale} />
   </body>
 </html>
