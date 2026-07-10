@@ -1,5 +1,6 @@
 ---
 import type { GetStaticPaths } from "astro";
+import { blockSlugs } from "../../game/blocks";
 import { registry } from "../../game/registries";
 import { gameStrings } from "../../i18n/gameStrings";
 import locales from "../../i18n/locales.json";
@@ -15,8 +16,8 @@ export const getStaticPaths = (() => {
 
 const { locale } = Astro.props;
 
-const blocks = registry("minecraft:block");
-const blockStrings = await gameStrings(locale, "block.minecraft");
+const blockRegistry = registry("minecraft:block");
+const blockString = await gameStrings(locale, "block.minecraft");
 ---
 
 <style>
@@ -34,8 +35,8 @@ const blockStrings = await gameStrings(locale, "block.minecraft");
 
 <BaseLayout {locale}>
   {
-    blocks.map((block) => (
-      <span>{blockStrings[unqualify(block)] ?? `UNKNOWN ${block}`}</span>
-    ))
+    blockSlugs.map(({ id, slug }) => {
+      return <a href={`/blocks/${slug}`}>{blockString(unqualify(id))}</a>;
+    })
   }
 </BaseLayout>
