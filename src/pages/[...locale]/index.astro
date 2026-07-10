@@ -1,7 +1,10 @@
 ---
 import type { GetStaticPaths } from "astro";
-import locales from "../../lang/locales.json";
+import { registry } from "../../game/registries";
+import { gameStrings } from "../../i18n/gameStrings";
+import locales from "../../i18n/locales.json";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { unqualify } from "../../minecraft/unqualify";
 
 export const getStaticPaths = (() => {
   return Object.keys(locales.locales).map((id) => ({
@@ -11,6 +14,9 @@ export const getStaticPaths = (() => {
 }) satisfies GetStaticPaths;
 
 const { locale } = Astro.props;
+
+const blocks = registry("minecraft:block");
+const blockStrings = await gameStrings(locale, "block.minecraft");
 ---
 
 <style>
@@ -26,4 +32,10 @@ const { locale } = Astro.props;
   }
 </style>
 
-<BaseLayout {locale} />
+<BaseLayout {locale}>
+  {
+    blocks.map((block) => (
+      <span>{blockStrings[unqualify(block)] ?? `UNKNOWN ${block}`}</span>
+    ))
+  }
+</BaseLayout>

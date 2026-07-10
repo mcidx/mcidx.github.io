@@ -5,5 +5,7 @@
     "en-US": {
       "minecraft": "en_us"
     }
-  }
+  },
+
+  "groups": ["block.minecraft"]
 }
