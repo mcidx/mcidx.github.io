@@ -1,7 +1,8 @@
 ---
 import type { GetStaticPaths } from "astro";
+import Flex from "../../components/Flex.astro";
+import Link from "../../components/Link.astro";
 import { blockSlugs } from "../../game/blocks";
-import { registry } from "../../game/registries";
 import { gameStrings } from "../../i18n/gameStrings";
 import locales from "../../i18n/locales.json";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -16,7 +17,6 @@ export const getStaticPaths = (() => {
 
 const { locale } = Astro.props;
 
-const blockRegistry = registry("minecraft:block");
 const blockString = await gameStrings(locale, "block.minecraft");
 ---
 
@@ -34,9 +34,13 @@ const blockString = await gameStrings(locale, "block.minecraft");
 </style>
 
 <BaseLayout {locale}>
-  {
-    blockSlugs.map(({ id, slug }) => {
-      return <a href={`/blocks/${slug}`}>{blockString(unqualify(id))}</a>;
-    })
-  }
+  <Flex wrap gap="2">
+    {
+      blockSlugs.map(({ id, slug }) => {
+        return (
+          <Link href={`/blocks/${slug}`}>{blockString(unqualify(id))}</Link>
+        );
+      })
+    }
+  </Flex>
 </BaseLayout>

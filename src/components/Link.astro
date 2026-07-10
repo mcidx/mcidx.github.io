@@ -1,0 +1,14 @@
+<style>
+  .link {
+    color: var(--accent-11);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+</style>
+
+<a class="link" {...Astro.props}>
+  <slot />
+</a>
