@@ -3,6 +3,11 @@
   @import "@radix-ui/colors/cyan-dark.css";
   @import "@radix-ui/colors/cyan-dark-alpha.css";
 
+  @font-face {
+    font-family: Minecraft;
+    src: url(/assets/fonts/minecraft-seven.woff2);
+  }
+
   :root {
     --base-u: 0.25rem;
     --n: round(down, 100vw / var(--base-u));
@@ -54,6 +59,8 @@
     --accent-a10: var(--cyan-a10);
     --accent-a11: var(--cyan-a11);
     --accent-a12: var(--cyan-a12);
+
+    --weight-black: 900;
 
     color: var(--gray-12);
   }

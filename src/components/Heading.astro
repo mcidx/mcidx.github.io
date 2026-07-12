@@ -1,0 +1,22 @@
+---
+interface Props {
+  size?: `${1}`;
+}
+
+const { size = "1" } = Astro.props;
+---
+
+<style>
+  .heading {
+    font-family: Minecraft;
+    font-weight: var(--weight-black);
+
+    &[data-size="1"] {
+      font-size: calc(4 * var(--u2));
+    }
+  }
+</style>
+
+<span class="heading" data-size={size}>
+  <slot />
+</span>
