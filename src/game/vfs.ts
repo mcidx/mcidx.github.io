@@ -1,7 +1,7 @@
 import { readdir } from "node:fs/promises";
 import { assertSSR } from "../astro/assertSSR";
+import { env } from "../astro/env";
 import locales from "../i18n/locales.json";
-import { secret } from "../secrets/secret";
 import type { Components } from "../types/components";
 import type { GameStrings } from "../types/gameStrings";
 import { ComponentAccessor } from "./componentAccessor";
@@ -47,4 +47,4 @@ class GameVFS {
 
 assertSSR();
 
-export const vfs = new GameVFS(secret("GAME"));
+export const vfs = new GameVFS(env("GAME"));
