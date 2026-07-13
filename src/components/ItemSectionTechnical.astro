@@ -17,26 +17,30 @@ const unqualified = unqualify(id);
 const strings = await getStrings(locale);
 const itemTags = new TagAccessor("item");
 const components = await vfs.components(unqualified);
+
+const formattedTags = itemTags
+  .applied(id)
+  .sort((a, b) => a.localeCompare(b, locale));
+const formattedComponents = components
+  .keys()
+  .sort((a, b) => a.localeCompare(b, locale));
 ---
 
-<Flex column gap="1">
-  <Text>
-    {strings.items.sections.technical.tags}
-  </Text>
+{
+  formattedTags && (
+    <Flex column gap="1">
+      <Text>{strings.items.sections.technical.tags}</Text>
 
-  <Flex wrap gap="1">
-    {
-      itemTags
-        .applied(id)
-        .sort((a, b) => a.localeCompare(b, locale))
-        .map((tag) => (
+      <Flex wrap gap="1">
+        {formattedTags.map((tag) => (
           <Badge>
             <Code>{tag}</Code>
           </Badge>
-        ))
-    }
-  </Flex>
-</Flex>
+        ))}
+      </Flex>
+    </Flex>
+  )
+}
 
 <Flex column gap="1">
   <Text>
@@ -45,14 +49,11 @@ const components = await vfs.components(unqualified);
 
   <Flex wrap gap="1">
     {
-      components
-        .keys()
-        .sort((a, b) => a.localeCompare(b, locale))
-        .map((tag) => (
-          <Badge>
-            <Code>{tag}</Code>
-          </Badge>
-        ))
+      formattedComponents.map((tag) => (
+        <Badge>
+          <Code>{tag}</Code>
+        </Badge>
+      ))
     }
   </Flex>
 </Flex>
