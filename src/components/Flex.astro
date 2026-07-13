@@ -1,12 +1,14 @@
 ---
+import type { HTMLAttributes } from "astro/types";
 import type { UnitSpace } from "../types/unitSpace";
 
-interface Props {
+interface Props extends HTMLAttributes<"div"> {
   wrap?: boolean;
   gap?: UnitSpace;
+  column?: boolean;
 }
 
-const { wrap, gap } = Astro.props;
+const { wrap, gap, column, ...props } = Astro.props;
 ---
 
 <style>
@@ -15,6 +17,10 @@ const { wrap, gap } = Astro.props;
 
     &[data-wrap="true"] {
       flex-wrap: wrap;
+    }
+
+    &[data-column="true"] {
+      flex-direction: column;
     }
 
     &[data-gap="0"] {
@@ -38,6 +44,12 @@ const { wrap, gap } = Astro.props;
   }
 </style>
 
-<div class="flex" data-wrap={wrap} data-gap={gap}>
+<div
+  {...props}
+  class="flex"
+  data-wrap={wrap}
+  data-gap={gap}
+  data-column={column}
+>
   <slot />
 </div>

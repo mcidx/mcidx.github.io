@@ -1,26 +1,30 @@
 ---
 interface Props {
   size?: `${1 | 2}`;
+  minecraft?: boolean;
 }
 
-const { size = "1" } = Astro.props;
+const { size = "1", minecraft } = Astro.props;
 ---
 
 <style>
   .heading {
-    font-family: Minecraft;
-    font-weight: var(--weight-black);
+    font-weight: var(--weight-bold);
 
     &[data-size="1"] {
-      font-size: calc(4 * var(--u2));
+      font-size: calc(3 * var(--u2));
     }
 
     &[data-size="2"] {
-      font-size: calc(3 * var(--u2));
+      font-size: calc(2 * var(--u2));
+    }
+
+    &[data-minecraft="true"] {
+      font-family: Minecraft;
     }
   }
 </style>
 
-<span class="heading" data-size={size}>
+<span class="heading" data-size={size} data-minecraft={minecraft}>
   <slot />
 </span>

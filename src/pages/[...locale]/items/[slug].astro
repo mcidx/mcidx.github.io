@@ -1,9 +1,9 @@
 ---
 import { mixStaticPaths } from "../../../astro/mixStaticPaths";
+import Flex from "../../../components/Flex.astro";
 import Heading from "../../../components/Heading.astro";
 import { itemSlugs } from "../../../game/slugs";
 import "../../../game/tags";
-import { tags } from "../../../game/tags";
 import { unqualify } from "../../../game/unqualify";
 import { vfs } from "../../../game/vfs";
 import { getStrings } from "../../../i18n/getStrings";
@@ -16,7 +16,6 @@ export const getStaticPaths = mixStaticPaths(_getStaticPaths, () =>
 );
 
 const { locale, id } = Astro.props;
-const { applies } = tags("item");
 
 const unqualified = unqualify(id);
 
@@ -28,15 +27,16 @@ const strings = await getStrings(locale);
 ---
 
 <BaseLayout {locale}>
-  <Heading>
+  <Heading minecraft>
     {gameStrings.get(itemNameComponent.translate)}
   </Heading>
 
   {
     itemSections.map((section) => {
       if (!section.shouldRender()) return null;
+
       return (
-        <div class="item-section">
+        <Flex column gap="2">
           <Heading size="2">
             {
               strings.items.sections[
@@ -45,8 +45,8 @@ const strings = await getStrings(locale);
             }
           </Heading>
 
-          <section.renderer {locale} />
-        </div>
+          <section.renderer {locale} {id} />
+        </Flex>
       );
     })
   }

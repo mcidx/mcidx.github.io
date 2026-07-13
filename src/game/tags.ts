@@ -2,7 +2,7 @@ import type { Tags } from "../types/tags";
 import { vfs } from "./vfs";
 
 const root = "client/data/minecraft/tags";
-const groups = new Map<string, Map<string, Set<string>>>();
+export const tagGroups = new Map<string, Map<string, Set<string>>>();
 
 for (const group of await vfs.dir(root)) {
   const path = `${root}/${group}`;
@@ -74,26 +74,5 @@ for (const group of await vfs.dir(root)) {
     tags.set(tag, flatten(tag));
   }
 
-  groups.set(group, tags);
-}
-
-export function tags(group: string) {
-  const tags = groups.get(group)!;
-
-  function tag(tag: string) {
-    return tags.get(tag)!;
-  }
-
-  function applies(id: string) {
-    const applies = new Set<string>();
-
-    for (const [tag, ids] of tags) {
-      if (!ids.has(id)) continue;
-      applies.add(tag);
-    }
-
-    return applies;
-  }
-
-  return { tags, tag, applies };
+  tagGroups.set(group, tags);
 }

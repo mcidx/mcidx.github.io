@@ -2,7 +2,8 @@
   "items": {
     "sections": {
       "technical": {
-        "title": "Technical"
+        "title": "Technical Jargon",
+        "tags": "Tags"
       }
     }
   }

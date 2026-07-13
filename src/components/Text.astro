@@ -1,6 +1,18 @@
+---
+interface Props {
+  minecraft?: boolean;
+}
+
+const { minecraft } = Astro.props;
+---
+
 <style>
   .text {
     font-size: var(--u2);
+
+    &[data-minecraft="true"] {
+      font-family: Minecraft;
+    }
   }
 </style>
 

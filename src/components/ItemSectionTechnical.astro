@@ -1,11 +1,35 @@
 ---
+import { TagAccessor } from "../game/tagAccessor";
 import { getStrings } from "../i18n/getStrings";
-import type { WithLocale } from "../types/withLocale";
-import Heading from "./Heading.astro";
+import type { ItemSectionProps } from "../types/itemSectionProps";
+import Badge from "./Badge.astro";
+import Code from "./Code.astro";
+import Flex from "./Flex.astro";
+import Text from "./Text.astro";
 
-type Props = WithLocale;
+type Props = ItemSectionProps;
 
-const { locale } = Astro.props;
+const { locale, id } = Astro.props;
 
+const strings = await getStrings(locale);
+const itemTags = new TagAccessor("item");
 ---
 
+<Flex column gap="1">
+  <Text>
+    {strings.items.sections.technical.tags}
+  </Text>
+
+  <Flex wrap gap="1">
+    {
+      itemTags
+        .applied(id)
+        .sort((a, b) => a.localeCompare(b, locale))
+        .map((tag) => (
+          <Badge>
+            <Code>{tag}</Code>
+          </Badge>
+        ))
+    }
+  </Flex>
+</Flex>
