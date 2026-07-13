@@ -1,5 +1,6 @@
 import { tagGroups } from "./tags";
 
+// TODO: move this to vfs
 export class TagAccessor {
   private tags: Map<string, Set<string>>;
 

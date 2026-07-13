@@ -27,4 +27,8 @@ export class ComponentAccessor {
 
     throw new Error(`Component ${name} not found in ${this.context}`);
   }
+
+  keys() {
+    return Object.keys(this.components);
+  }
 }

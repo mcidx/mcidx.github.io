@@ -1,5 +1,7 @@
 ---
 import { TagAccessor } from "../game/tagAccessor";
+import { unqualify } from "../game/unqualify";
+import { vfs } from "../game/vfs";
 import { getStrings } from "../i18n/getStrings";
 import type { ItemSectionProps } from "../types/itemSectionProps";
 import Badge from "./Badge.astro";
@@ -10,9 +12,11 @@ import Text from "./Text.astro";
 type Props = ItemSectionProps;
 
 const { locale, id } = Astro.props;
+const unqualified = unqualify(id);
 
 const strings = await getStrings(locale);
 const itemTags = new TagAccessor("item");
+const components = await vfs.components(unqualified);
 ---
 
 <Flex column gap="1">
@@ -24,6 +28,25 @@ const itemTags = new TagAccessor("item");
     {
       itemTags
         .applied(id)
+        .sort((a, b) => a.localeCompare(b, locale))
+        .map((tag) => (
+          <Badge>
+            <Code>{tag}</Code>
+          </Badge>
+        ))
+    }
+  </Flex>
+</Flex>
+
+<Flex column gap="1">
+  <Text>
+    {strings.items.sections.technical.components}
+  </Text>
+
+  <Flex wrap gap="1">
+    {
+      components
+        .keys()
         .sort((a, b) => a.localeCompare(b, locale))
         .map((tag) => (
           <Badge>

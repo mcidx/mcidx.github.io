@@ -3,7 +3,8 @@
     "sections": {
       "technical": {
         "title": "Technical Jargon",
-        "tags": "Tags"
+        "tags": "Tags",
+        "components": "Components"
       }
     }
   }
