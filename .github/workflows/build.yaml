@@ -11,6 +11,11 @@ env:
   # workflow
   GAME_VERSION_TYPE: snapshot
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build:
     name: Build
