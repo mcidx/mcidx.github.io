@@ -12,12 +12,15 @@
   }
 
   :root {
-    --base-u: 0.25rem;
+    --base-u: 0.125rem;
     --n: round(down, 100vw / var(--base-u));
 
-    --u0: calc(100vw / var(--n)); /* vanilla-scale art */
-    --u1: calc(var(--u0) * 2); /* macro-art */
-    --u2: calc(var(--u1) * 2); /* UI */
+    --u-vanilla-scale: calc(100vw / var(--n));
+    --u-macro-scale: calc(var(--u-vanilla-scale) * 2);
+
+    --u0: var(--u-macro-scale);
+    --u1: calc(var(--u0) * 2);
+    --u2: calc(var(--u1) * 2);
     --u3: calc(var(--u2) * 2);
     --u4: calc(var(--u3) * 2);
     --u5: calc(var(--u4) * 2);

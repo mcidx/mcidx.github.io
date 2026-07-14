@@ -8,7 +8,7 @@ export const itemSections: ItemSectionConfig[] = [
     name: "consumable",
     renderer: ItemSectionConsumable,
 
-    async shouldRender({ id, components }) {
+    async shouldRender({ components }) {
       return components.has("minecraft:consumable");
     },
   },

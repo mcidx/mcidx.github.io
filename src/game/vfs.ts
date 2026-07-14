@@ -26,6 +26,10 @@ class GameVFS {
     return this.file(path).json() as Promise<Type>;
   }
 
+  bytes(path: string) {
+    return this.file(path).bytes();
+  }
+
   async components(id: string) {
     const components = await this.json<Components>(
       `report/generated/reports/minecraft/components/item/${id}.json`,

@@ -1,0 +1,15 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"img">;
+
+const { props } = Astro;
+---
+
+<style>
+  .texture {
+    image-rendering: pixelated;
+  }
+</style>
+
+<img class="texture" {...props} />

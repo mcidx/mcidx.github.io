@@ -1,8 +1,10 @@
 ---
+import { times } from "lodash-es";
 import type { ItemSectionProps } from "../types/itemSectionProps";
 import FactSheetCell from "./FactSheetCell.astro";
 import FactSheetRoot from "./FactSheetRoot.astro";
 import FactSheetRow from "./FactSheetRow.astro";
+import Texture from "./Texture.astro";
 
 type Props = ItemSectionProps;
 
@@ -12,13 +14,38 @@ const consumable = components.get("minecraft:consumable");
 const food = components.tryGet("minecraft:food");
 ---
 
+<style>
+  .food-full {
+    position: relative;
+
+    width: calc(16 * var(--u-vanilla-scale));
+    height: calc(16 * var(--u-vanilla-scale));
+
+    .align {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+    }
+  }
+</style>
+
 <FactSheetRoot>
   {
     food && (
       <>
         <FactSheetRow>
           <FactSheetCell key>Hunger replenishment</FactSheetCell>
-          <FactSheetCell value>{food.nutrition}</FactSheetCell>
+          <FactSheetCell value>
+            {times(Math.floor(food.nutrition), () => (
+              <div class="food-full">
+                <Texture class="align" src="/api/textures/ui/food_empty.png" />
+                <Texture class="align" src="/api/textures/ui/food_full.png" />
+              </div>
+            ))}
+          </FactSheetCell>
         </FactSheetRow>
         <FactSheetRow>
           <FactSheetCell key>Hunger saturation</FactSheetCell>
