@@ -2,7 +2,7 @@ import type {
   ComponentName,
   Components,
   ComponentsMap,
-} from "../types/components";
+} from "../types/component";
 
 export class ComponentAccessor {
   components: Partial<ComponentsMap>;
