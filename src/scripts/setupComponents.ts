@@ -2,13 +2,11 @@ import { camelCase, upperFirst } from "lodash-es";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { format } from "prettier";
-import { type LanguageName } from "quicktype-core";
 import { unqualify } from "../game/unqualify";
 import { vfs } from "../game/vfs";
 
 const readRoot = "report/generated/reports/minecraft/components/item";
 const writeRoot = "src/generated/components";
-const targetLanguage: LanguageName = "typescript-zod";
 const items = await vfs.dir(readRoot);
 
 const observations = new Map<string, unknown[]>();
@@ -34,13 +32,11 @@ await mkdir(writeRoot, { recursive: true });
 let indexImports = "";
 let indexEntries = "";
 
-let i = 0;
 for (const [id, samples] of observations) {
   const unqualified = unqualify(id);
   const name = upperFirst(camelCase(unqualified));
-
   const path = `${writeRoot}/${unqualified}.ts`;
-  const schema = inferSchema(samples[0]);
+  const schema = inferSchema(samples);
 
   let content = "";
 
@@ -58,50 +54,89 @@ for (const [id, samples] of observations) {
   await writeFile(path, content);
 }
 
-function inferSchema(sample: unknown) {
-  const type = typeof sample;
+function inferSchema(samples: unknown[]) {
+  if (samples.length === 0) return "z.never()";
 
-  if (type === "string") {
-    return "z.string()";
-  }
+  let hasArray = false;
 
-  if (type === "number") {
-    return "z.number()";
-  }
+  let total = 0;
+  const arrayElements: unknown[] = [];
+  const objectProperties: Record<string, unknown[]> = {};
 
-  if (type === "boolean") {
-    return "z.boolean()";
-  }
+  const schemas = new Set<string>();
 
-  if (type === "object") {
-    if (sample === null) {
-      return "z.null()";
+  for (const sample of samples) {
+    switch (typeof sample) {
+      case "string":
+        schemas.add("z.string()");
+        break;
+
+      case "number":
+        schemas.add("z.number()");
+        break;
+
+      case "boolean":
+        schemas.add("z.boolean()");
+        break;
+
+      case "object":
+        if (sample === null) {
+          schemas.add("z.null()");
+          break;
+        }
+
+        if (Array.isArray(sample)) {
+          hasArray = true;
+          arrayElements.push(...sample);
+          break;
+        }
+
+        total++;
+
+        for (const key in sample) {
+          if (!objectProperties[key]) objectProperties[key] = [];
+          objectProperties[key].push((sample as Record<string, unknown>)[key]);
+        }
+
+        break;
+
+      default:
+        throw new Error(`Unhandled type ${typeof sample}`);
     }
+  }
 
-    if (Array.isArray(sample)) {
-      let child = "z.never()";
+  if (hasArray) {
+    schemas.add(`z.array(${inferSchema(arrayElements)})`);
+  }
 
-      if (sample.length > 0) {
-        child = inferSchema(sample[0]);
-      }
+  if (total > 0) {
+    let draft = "z.object({";
+    const keys = Object.keys(objectProperties).sort();
 
-      return `z.array(${child})`;
-    }
+    for (const key of keys) {
+      const values = objectProperties[key];
+      const isOptional = values.length < total;
+      const valueSchema = inferSchema(values);
 
-    let draft = "";
+      draft += `"${key}":`;
+      draft += valueSchema;
 
-    draft += "z.object({";
+      if (isOptional) draft += ".optional()";
 
-    for (const key in sample) {
-      draft += `${key}:${inferSchema((sample as Record<string, unknown>)[key])},`;
+      draft += ",";
     }
 
     draft += "})";
 
-    return draft;
+    schemas.add(draft);
   }
 
-  throw new Error(`Unhandled type ${type}`);
+  const uniqueSchemas = Array.from(schemas);
+
+  if (uniqueSchemas.length === 0) return "z.never()";
+  if (uniqueSchemas.length === 1) return uniqueSchemas[0];
+
+  return `z.union([${uniqueSchemas.join(", ")}])`;
 }
 
 let indexContent = "";
@@ -109,6 +144,6 @@ let indexContent = "";
 indexContent += `${indexImports}\n`;
 indexContent += "export const componentSchemas = {\n";
 indexContent += indexEntries;
-indexContent += "};\n\n";
+indexContent += "};\n";
 
 await writeFile(`${writeRoot}/index.ts`, indexContent);
