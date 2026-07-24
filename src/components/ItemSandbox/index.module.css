@@ -1,0 +1,9 @@
+.wrapper {
+  position: relative;
+
+  height: 20rem;
+
+  .canvas {
+    background-color: #ff000040;
+  }
+}

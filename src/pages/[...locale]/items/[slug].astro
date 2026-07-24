@@ -2,6 +2,7 @@
 import { mixStaticPaths } from "../../../astro/mixStaticPaths";
 import Flex from "../../../components/Flex.astro";
 import Heading from "../../../components/Heading.astro";
+import { ItemSandbox } from "../../../components/ItemSandbox";
 import { itemSlugs } from "../../../game/slugs";
 import "../../../game/tags";
 import { unqualify } from "../../../game/unqualify";
@@ -21,16 +22,20 @@ const { slug } = Astro.params;
 
 const unqualified = unqualify(id);
 
-const components = await vfs.components(unqualified);
 const gameStrings = await vfs.strings(locale);
-const itemNameComponent = components.get("minecraft:item_name");
+const components = await vfs.components(unqualified);
+
+const itemName = components.get("minecraft:item_name");
+const itemModel = components.get("minecraft:item_model");
 
 const strings = await getStrings(locale);
 ---
 
 <BaseLayout {locale}>
+  <ItemSandbox client:load />
+
   <Heading minecraft>
-    {gameStrings.get(itemNameComponent.translate)}
+    {gameStrings.get(itemName.translate)}
   </Heading>
 
   {
